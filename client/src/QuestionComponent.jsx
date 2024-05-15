@@ -6,7 +6,7 @@ const QuestionComponent = () => {
 
   const handleVote = async () => {
     try {
-      await axios.post('/vote', {
+      await axios.post('http://localhost:5000/vote', {
         option: selectedOption,
       });
       // Redirect to results page

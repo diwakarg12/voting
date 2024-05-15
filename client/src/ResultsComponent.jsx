@@ -8,7 +8,7 @@ const ResultsComponent = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await axios.get('/results');
+        const response = await axios.get('http://localhost:5000/results');
         setResults(response.data);
         console.log(response.data);
       } catch (error) {
@@ -25,9 +25,9 @@ const ResultsComponent = () => {
       <table className='table-auto'>
         <thead>
           <tr>
-            <th className='px-4 py-2 text-start border'>Option</th>
-            <th className='px-4 py-2 text-start border'>Votes</th>
-            <th className='px-4 py-2 text-start border'>Percentage</th>
+            <th className='px-4 py-2 text-start'>Option</th>
+            <th className='px-4 py-2 text-start'>Votes</th>
+            <th className='px-4 py-2 text-start'>Percentage</th>
           </tr>
         </thead>
         <tbody>
