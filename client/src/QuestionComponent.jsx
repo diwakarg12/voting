@@ -3,13 +3,18 @@ import axios from 'axios';
 
 const QuestionComponent = () => {
   const [selectedOption, setSelectedOption] = useState('');
+  const [isVoteEnabled, setIsVoteEnabled] = useState(false);
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+    setIsVoteEnabled(true);
+  };
 
   const handleVote = async () => {
     try {
       await axios.post('http://localhost:5000/vote', {
         option: selectedOption,
       });
-      // Redirect to results page
       window.location.href = '/vote-percent';
     } catch (error) {
       console.error('Error voting:', error);
@@ -28,7 +33,7 @@ const QuestionComponent = () => {
             type='radio'
             className='form-radio text-indigo-600 h-5 w-5'
             checked={selectedOption === 'JavaScript'}
-            onChange={() => setSelectedOption('JavaScript')}
+            onChange={() => handleOptionChange('JavaScript')}
           />
           <span className='ml-2'>JavaScript (Node.js)</span>
         </label>
@@ -38,14 +43,17 @@ const QuestionComponent = () => {
             type='radio'
             className='form-radio text-indigo-600 h-5 w-5'
             checked={selectedOption === 'Python'}
-            onChange={() => setSelectedOption('Python')}
+            onChange={() => handleOptionChange('Python')}
           />
           <span className='ml-2'>Python (Django/Flask)</span>
         </label>
       </div>
       <button
         onClick={handleVote}
-        className='mt-4 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+        disabled={!isVoteEnabled}
+        className={`mt-4 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+          !isVoteEnabled && 'cursor-not-allowed'
+        }`}
       >
         Vote
       </button>

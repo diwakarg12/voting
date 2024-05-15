@@ -10,7 +10,6 @@ const ResultsComponent = () => {
       try {
         const response = await axios.get('http://localhost:5000/results');
         setResults(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching results:', error);
       }
