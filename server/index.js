@@ -9,7 +9,6 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -23,11 +22,11 @@ try {
 
 // Define MongoDB schema and model
 const voteSchema = new mongoose.Schema({
-    initialized: { type: Boolean, default: false }, // Add initialization flag
+    initialized: { type: Boolean, default: false },
     optionA: { type: Number, default: 0 },
     optionB: { type: Number, default: 0 },
-    optionAName: { type: String, default: "JavaScript" }, // Add name for option A
-    optionBName: { type: String, default: "Python" }, // Add name for option B
+    optionAName: { type: String, default: "JavaScript" },
+    optionBName: { type: String, default: "Python" },
 });
 
 const Vote = mongoose.model('Vote', voteSchema);
@@ -39,7 +38,7 @@ app.get('/initialize', async (req, res) => {
             return res.status(400).json({ message: 'Database is already initialized' });
         }
         await Vote.deleteMany({});
-        await Vote.create({ initialized: true }); // Set initialized flag
+        await Vote.create({ initialized: true });
         res.status(200).json({ message: 'Database initialized' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -50,12 +49,12 @@ app.post('/vote', async (req, res) => {
         const { option } = req.body;
         const existingVote = await Vote.findOne({});
         if (existingVote) {
-            if (option === 'JavaScript') { // Use option name instead of 'optionA'
+            if (option === 'JavaScript') {
                 existingVote.optionA += 1;
-            } else if (option === 'Python') { // Use option name instead of 'optionB'
+            } else if (option === 'Python') {
                 existingVote.optionB += 1;
             }
-            await existingVote.save(); // Save the updated vote data
+            await existingVote.save();
         }
         res.status(200).json({ message: 'Vote recorded successfully' });
     } catch (err) {
@@ -83,5 +82,5 @@ app.get('/results', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT ||5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
