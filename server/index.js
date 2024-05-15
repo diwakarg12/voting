@@ -4,6 +4,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
@@ -13,7 +15,7 @@ app.use(cors());
 
 // Connect to MongoDB
 try {
-    await mongoose.connect('mongodb+srv://diwakargiri234:Diwakar12345@diwakar.rjvg5fh.mongodb.net/voting_app');
+    await mongoose.connect(`${process.env.MONGO_URL}/voting_app`);
     console.log("Connected to MongoDB");
 } catch (error) {
     console.error("Error connecting to MongoDB:", error.message);
@@ -70,8 +72,8 @@ app.get('/results', async (req, res) => {
             return res.status(404).json({ error: 'No vote data found' });
         }
         const totalVotes = vote.optionA + vote.optionB;
-        const optionAPercentage = (vote.optionA / totalVotes) * 100;
-        const optionBPercentage = (vote.optionB / totalVotes) * 100;
+        const optionAPercentage = Math.round((vote.optionA / totalVotes) * 100);
+        const optionBPercentage = Math.round((vote.optionB / totalVotes) * 100);
         const optionAName = vote.optionAName;
         const optionBName = vote.optionBName;
         res.status(200).json({ totalVotes, optionA: vote.optionA, optionB: vote.optionB, optionAPercentage, optionBPercentage, optionAName, optionBName });
